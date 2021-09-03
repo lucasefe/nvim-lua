@@ -23,6 +23,7 @@ vim.api.nvim_exec(
   false
 )
 
+
 local use = require('packer').use
 require('packer').startup(function()
   use 'wbthomason/packer.nvim' -- Package manager
@@ -74,7 +75,6 @@ require('packer').startup(function()
   }
   use { "jose-elias-alvarez/null-ls.nvim", requires = {"nvim-lua/plenary.nvim", "neovim/nvim-lspconfig"} }
   use { "folke/trouble.nvim", requires = {"kyazdani42/nvim-web-devicons" } }
-  use { 'lewis6991/gitsigns.nvim', requires = { 'nvim-lua/plenary.nvim' } }
 
   use {
     'lewis6991/gitsigns.nvim',
