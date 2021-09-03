@@ -77,21 +77,29 @@ require('packer').startup(function()
   use { 'lewis6991/gitsigns.nvim', requires = { 'nvim-lua/plenary.nvim' } }
 
   use {
-    'glepnir/galaxyline.nvim',
-    branch = 'main',
-    config = function()
-      require('plugins.statusline')
-    end,
-    requires = {'kyazdani42/nvim-web-devicons', opt = true}
-  }
-
-  use {
     'lewis6991/gitsigns.nvim',
     requires = {
       'nvim-lua/plenary.nvim'
     },
     config = function()
       require('plugins.gitsigns')
+    end
+  }
+
+  use "rafamadriz/neon"
+
+  use {
+    'hoob3rt/lualine.nvim',
+    requires = {
+      'kyazdani42/nvim-web-devicons', 
+      opt = true
+    },
+    config = function()
+      require('lualine').setup {
+        options = {
+          theme = 'neon'
+        }
+      }
     end
   }
 end)
@@ -143,7 +151,7 @@ vim.o.autoindent = true
 --Set colorscheme (order is important here)
 vim.o.termguicolors = true
 vim.g.onedark_terminal_italics = 2
-vim.cmd [[colorscheme gruvbox]]
+vim.cmd [[colorscheme neon]]
 
 --Remap space as leader key
 vim.api.nvim_set_keymap('', '<Space>', '<Nop>', { noremap = true, silent = true })
