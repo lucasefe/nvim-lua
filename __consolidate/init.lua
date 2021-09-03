@@ -35,7 +35,6 @@ require('packer').startup(function()
   -- Add git related info in the signs columns and popups
   use { 'lewis6991/gitsigns.nvim', requires = { 'nvim-lua/plenary.nvim' } }
   -- Additional textobjects for treesitter
-  use 'nvim-treesitter/nvim-treesitter-textobjects'
 
   use {
     "hrsh7th/nvim-cmp",
@@ -49,6 +48,7 @@ require('packer').startup(function()
 
   use { "folke/trouble.nvim", requires = {"kyazdani42/nvim-web-devicons" } }
   use "nvim-lua/plenary.nvim"
+
   use 'neovim/nvim-lspconfig'
   use { "jose-elias-alvarez/null-ls.nvim", requires = {"nvim-lua/plenary.nvim", "neovim/nvim-lspconfig"} }
 end)

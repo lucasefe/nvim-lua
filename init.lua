@@ -74,12 +74,12 @@ require('packer').startup(function()
   }
   use { "jose-elias-alvarez/null-ls.nvim", requires = {"nvim-lua/plenary.nvim", "neovim/nvim-lspconfig"} }
   use { "folke/trouble.nvim", requires = {"kyazdani42/nvim-web-devicons" } }
-
+  use { 'lewis6991/gitsigns.nvim', requires = { 'nvim-lua/plenary.nvim' } }
 
   use {
     'glepnir/galaxyline.nvim',
     branch = 'main',
-    config = function() 
+    config = function()
       require('plugins.statusline')
     end,
     requires = {'kyazdani42/nvim-web-devicons', opt = true}
@@ -94,7 +94,6 @@ require('packer').startup(function()
       require('plugins.gitsigns')
     end
   }
-
 end)
 
 vim.o.hidden = true
