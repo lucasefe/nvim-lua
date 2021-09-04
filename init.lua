@@ -45,15 +45,23 @@ require('packer').startup(function()
   use 'kyazdani42/nvim-web-devicons'
   use "nvim-lua/plenary.nvim"
 
+  use 'L3MON4D3/LuaSnip' 
+  use "rafamadriz/friendly-snippets"
+
   use {
     "hrsh7th/nvim-cmp",
     requires = {
       "hrsh7th/cmp-buffer",
       "hrsh7th/cmp-path",
       "hrsh7th/cmp-calc",
-      "hrsh7th/cmp-nvim-lsp"
-    }
+      "hrsh7th/cmp-nvim-lsp",
+      'saadparwaiz1/cmp_luasnip'
+    },
+    config = function ()
+      require('plugins.completion')
+    end
   }
+
 
   use {
      "kabouzeid/nvim-lspinstall",
@@ -110,6 +118,8 @@ require('packer').startup(function()
       }
     end
   }
+
+
 end)
 
 vim.o.hidden = true
