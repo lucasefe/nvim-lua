@@ -73,7 +73,15 @@ require('packer').startup(function()
       require("plugins.lspconfig")
     end,
   }
-  use { "jose-elias-alvarez/null-ls.nvim", requires = {"nvim-lua/plenary.nvim", "neovim/nvim-lspconfig"} }
+
+  use { 
+    "jose-elias-alvarez/null-ls.nvim", 
+    requires = {
+      "nvim-lua/plenary.nvim", 
+      "neovim/nvim-lspconfig"
+    } 
+  }
+
   use { "folke/trouble.nvim", requires = {"kyazdani42/nvim-web-devicons" } }
 
   use {
