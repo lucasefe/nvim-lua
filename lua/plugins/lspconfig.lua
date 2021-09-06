@@ -5,7 +5,7 @@ if not (present1 or present2) then
   return
 end
 
-local function on_attach(client, bufnr)
+local function set_mappings(client, bufnr)
   local function buf_set_keymap(...)
      vim.api.nvim_buf_set_keymap(bufnr, ...)
   end
@@ -66,20 +66,14 @@ capabilities.textDocument.completion.completionItem.resolveSupport = {
 local function setup_servers()
    lspinstall.setup()
    local servers = lspinstall.installed_servers()
+   print(vim.inspect(servers))
 
    for _, lang in pairs(servers) do
-      if lang ~= "lua" then
-         lspconfig[lang].setup {
-            on_attach = on_attach,
-            capabilities = capabilities,
-            flags = {
-               debounce_text_changes = 500,
-            },
-            -- root_dir = vim.loop.cwd,
-         }
-      elseif lang == "lua" then
-         lspconfig[lang].setup {
-            on_attach = on_attach,
+      if lang == "lua" then
+         lspconfig["lua"].setup {
+            on_attach = function(client, bufnr)
+               set_mappings(client, bufnr)
+            end,
             capabilities = capabilities,
             flags = {
                debounce_text_changes = 500,
@@ -103,29 +97,64 @@ local function setup_servers()
                },
             },
          }
+      elseif lang == "typescript" then
+         lspconfig["tsserver"].setup {
+            on_attach = function(client, bufnr)
+               set_mappings(client, bufnr)
+               -- disable tsserver formatting if you plan on formatting via null-ls
+               client.resolved_capabilities.document_formatting = false
+               client.resolved_capabilities.document_range_formatting = false
+
+
+               local ts_utils = require("nvim-lsp-ts-utils")
+               -- defaults
+               ts_utils.setup {
+                 debug = true,
+                 enable_import_on_completion = true,
+                 eslint_enable_code_actions = true,
+                 eslint_enable_disable_comments = true,
+                 eslint_bin = "eslint_d",
+                 eslint_enable_diagnostics = true,
+                 enable_formatting = true,
+                 formatter = "eslint_d",
+                 formatter_opts = { },
+                 filter_out_diagnostics_by_severity = {},
+                 filter_out_diagnostics_by_code = { 
+                   80001,
+                   7016
+                 },
+              }
+
+              -- required to fix code action ranges and filter diagnostics
+              ts_utils.setup_client(client)
+
+              -- no default maps, so you may want to define some here
+              local opts = { silent = true }
+              vim.api.nvim_buf_set_keymap(bufnr, "n", "gs", ":TSLspOrganize<CR>", opts)
+              vim.api.nvim_buf_set_keymap(bufnr, "n", "gr", ":TSLspRenameFile<CR>", opts)
+              vim.api.nvim_buf_set_keymap(bufnr, "n", "gi", ":TSLspImportAll<CR>", opts)
+            end,
+            capabilities = capabilities,
+            flags = {
+               debounce_text_changes = 500,
+            },
+         }
+      else
+         lspconfig[lang].setup {
+            on_attach = function(client, bufnr)
+               set_mappings(client, bufnr)
+            end,
+            capabilities = capabilities,
+            flags = {
+               debounce_text_changes = 500,
+            },
+         }
       end
    end
 end
 
 setup_servers()
 
-local null_ls = require("null-ls")
-
-null_ls.config({
-  sources = { 
-    null_ls.builtins.formatting.eslint_d,
-    null_ls.builtins.diagnostics.write_good,
-    null_ls.builtins.code_actions.gitsigns,
-  }
-})
-
-lspconfig["null-ls"].setup({
-    on_attach = on_attach,
-    capabilities = capabilities
-})
-
-
--- Automatically reload after `:LspInstall <server>` so we don't have to restart neovim
 lspinstall.post_install_hook = function()
    setup_servers() -- reload installed servers
    vim.cmd "bufdo e"
@@ -153,6 +182,7 @@ vim.lsp.handlers["textDocument/publishDiagnostics"] = vim.lsp.with(vim.lsp.diagn
 vim.lsp.handlers["textDocument/hover"] = vim.lsp.with(vim.lsp.handlers.hover, {
    border = "single",
 })
+
 vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.signature_help, {
    border = "single",
 })

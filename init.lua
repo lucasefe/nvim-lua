@@ -45,7 +45,7 @@ require('packer').startup(function()
   use 'kyazdani42/nvim-web-devicons'
   use "nvim-lua/plenary.nvim"
 
-  use 'L3MON4D3/LuaSnip' 
+  use 'L3MON4D3/LuaSnip'
   use "rafamadriz/friendly-snippets"
 
   use {
@@ -62,6 +62,7 @@ require('packer').startup(function()
     end
   }
 
+  use 'jose-elias-alvarez/nvim-lsp-ts-utils'
 
   use {
      "kabouzeid/nvim-lspinstall",
@@ -82,12 +83,12 @@ require('packer').startup(function()
     end,
   }
 
-  use { 
-    "jose-elias-alvarez/null-ls.nvim", 
+  use {
+    "jose-elias-alvarez/null-ls.nvim",
     requires = {
-      "nvim-lua/plenary.nvim", 
+      "nvim-lua/plenary.nvim",
       "neovim/nvim-lspconfig"
-    } 
+    }
   }
 
   use { "folke/trouble.nvim", requires = {"kyazdani42/nvim-web-devicons" } }
@@ -107,7 +108,7 @@ require('packer').startup(function()
   use {
     'hoob3rt/lualine.nvim',
     requires = {
-      'kyazdani42/nvim-web-devicons', 
+      'kyazdani42/nvim-web-devicons',
       opt = true
     },
     config = function()
